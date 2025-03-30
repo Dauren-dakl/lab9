@@ -1,12 +1,13 @@
-import pygame
+import pygame 
 import os
+
 pygame.init()
 os.chdir(r"C:\\Users\\Acer\\Desktop\\PP2")
 
 screen = pygame.display.set_mode((1080, 900))
-
 clock = pygame.time.Clock()
 
+# Определение цветов
 RED = (230, 0, 0)
 GREEN = (0, 230, 0)
 BLUE = (0, 0, 230)
@@ -28,6 +29,26 @@ def draw_rectangle(surface, color, pos):
     x, y = pos
     pygame.draw.rect(surface, color, (x - 35, y - 20, 70, 40))
 
+def draw_square(surface, color, pos, size=50):
+    x, y = pos
+    pygame.draw.rect(surface, color, (x - size//2, y - size//2, size, size))
+
+def draw_right_triangle(surface, color, pos, size=50):
+    x, y = pos
+    points = [(x, y), (x, y - size), (x + size, y)]
+    pygame.draw.polygon(surface, color, points)
+
+def draw_equilateral_triangle(surface, color, pos, size=50):
+    x, y = pos
+    height = (size * (3 ** 0.5)) / 2
+    points = [(x, y - height//2), (x - size//2, y + height//2), (x + size//2, y + height//2)]
+    pygame.draw.polygon(surface, color, points)
+
+def draw_rhombus(surface, color, pos, size=50):
+    x, y = pos
+    points = [(x, y - size), (x - size, y), (x, y + size), (x + size, y)]
+    pygame.draw.polygon(surface, color, points)
+
 def pick_color():
     click = pygame.mouse.get_pressed()
     x, y = pygame.mouse.get_pos()
@@ -44,6 +65,14 @@ def pick_color():
             return "circle"
         elif 230 <= x <= 270 and 0 <= y <= 40:
             return "rectangle"
+        elif 280 <= x <= 320 and 0 <= y <= 40:
+            return "square"
+        elif 330 <= x <= 370 and 0 <= y <= 40:
+            return "right_triangle"
+        elif 380 <= x <= 420 and 0 <= y <= 40:
+            return "equilateral_triangle"
+        elif 430 <= x <= 470 and 0 <= y <= 40:
+            return "rhombus"
     return color
 
 def painting(color):
@@ -54,6 +83,14 @@ def painting(color):
             draw_circle(screen, WHITE, (x, y))
         elif color == 'rectangle':
             draw_rectangle(screen, WHITE, (x, y))
+        elif color == 'square':
+            draw_square(screen, WHITE, (x, y))
+        elif color == 'right_triangle':
+            draw_right_triangle(screen, WHITE, (x, y))
+        elif color == 'equilateral_triangle':
+            draw_equilateral_triangle(screen, WHITE, (x, y))
+        elif color == 'rhombus':
+            draw_rhombus(screen, WHITE, (x, y))
         else:
             pygame.draw.circle(screen, color, (x, y), 27)
 
@@ -64,10 +101,15 @@ while True:
 
     for i in range(len(colors)):
         draw_rect(i)
+    
     screen.blit(eraser, (1010, 0))
     pygame.draw.circle(screen, WHITE, (200, 20), 20)
     pygame.draw.rect(screen, WHITE, (230, 10, 40, 40))
-
+    pygame.draw.rect(screen, WHITE, (280, 10, 40, 40))  # Square
+    pygame.draw.polygon(screen, WHITE, [(330, 50), (330, 10), (370, 50)])  # Right triangle
+    pygame.draw.polygon(screen, WHITE, [(380, 30), (360, 50), (400, 50)])  # Equilateral triangle
+    pygame.draw.polygon(screen, WHITE, [(430, 30), (450, 10), (470, 30), (450, 50)])  # Rhombus
+    
     color = pick_color()
     painting(color)
 
